@@ -1,21 +1,21 @@
 <?php
 
-namespace Digila\ValueObjects;
+namespace Digila\ValueObjects\Nullable;
 
 abstract class UrlValue
 {
     protected $value;
 
-    public function __construct(string $value)
+    public function __construct(?string $value = null)
     {
         $value = trim($value);
         $value = $value != "" ? $value : null;
 
-        if (!self::isValid($value)) {
+        if (!empty($value) && !self::isValid($value)) {
             throw new \InvalidArgumentException("URLの形式ではありません。({$value})");
         }
 
-        $this->value = $value;
+        $this->value = !empty($value) ? $value : null;
     }
 
     public static function isValid($value): bool
@@ -23,28 +23,28 @@ abstract class UrlValue
         return preg_match('/https?:\/{2}[\w\/:%#\$&\?\(\)~\.=\+\-]+/', $value);
     }
 
-    public function value(): string
+    public function value(): ?string
     {
         return $this->value;
     }
-
-    public function scheme(): string
+    
+    public function scheme(): ?string
     {
         return parse_url($this->value, PHP_URL_SCHEME);
     }
 
-    public function domain(): string
+    public function domain(): ?string
     {
         return parse_url($this->value, PHP_URL_HOST);
     }
 
     public function isNull(): bool
     {
-        return false;
+        return is_null($this->value);
     }
 
     public function has(): bool
     {
-        return true;
+        return !empty($this->value) ? true : false;
     }
 }

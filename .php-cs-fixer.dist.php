@@ -1,7 +1,6 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('laravel/config')
     ->exclude('vendor')
     ->exclude('node_module')
     ->in(__DIR__)

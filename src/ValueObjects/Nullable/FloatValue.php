@@ -1,14 +1,14 @@
 <?php
 
-namespace Digila\ValueObjects;
+namespace Digila\ValueObjects\Nullable;
 
-abstract class IntegerValue
+abstract class FloatValue
 {
     protected $value;
 
-    public function __construct(int $value)
+    public function __construct(?float $value = null)
     {
-        if (is_null($value) || !self::isValid($value)) {
+        if (!is_null($value) && !self::isValid($value)) {
             throw new \InvalidArgumentException("不正な値です。({$value})");
         }
 
@@ -17,21 +17,21 @@ abstract class IntegerValue
 
     public static function isValid($value): bool
     {
-        return is_int($value);
+        return is_float($value);
     }
 
-    public function value(): int
+    public function value(): ?float
     {
         return $this->value;
     }
 
     public function isNull(): bool
     {
-        return false;
+        return is_null($this->value);
     }
 
     public function has(): bool
     {
-        return true;
+        return $this->value !== null ? true : false;
     }
 }
